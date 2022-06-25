@@ -26,57 +26,40 @@ def gender(df):
     res = []  # функція повертає кількість людей
     count = []  # male/female/child
     # loc() дозволяє звертатися до структури по міткам
-    male = df['Sex'].loc[((df['Sex'] == 'Male')
-                          & (df['Age'] >= 18))].count()
-    female = df['Sex'].loc[((df['Sex'] == 'Female')
-                            & (df['Age'] >= 18))].count()
+    male = df['Sex'].loc[((df['Sex'] == 'Male') & (df['Age'] >= 18))].count()
+    female = df['Sex'].loc[((df['Sex'] == 'Female') & (df['Age'] >= 18))].count()
     child = df['Sex'].loc[df['Age'] < 18].count()
-
     count.append(male)
     count.append(female)
     count.append(child)
-
     res += 'Male', 'Fmale', 'Child'
     return res, count
-
-
+    
 def average_age(df):  # обчислюємо середній вік за гендером
-    temp = [df['Age'].loc[((df['Sex'] == 'Male')
-                           & (df['Age'] >= 18))].mean(),
-            df['Age'].loc[((df['Sex'] == 'Female')
-                           & (df['Age'] >= 18))].mean(),
+    temp = [df['Age'].loc[((df['Sex'] == 'Male') & (df['Age'] >= 18))].mean(),
+            df['Age'].loc[((df['Sex'] == 'Female') & (df['Age'] >= 18))].mean(),
             df['Age'].loc[df['Age'] < 18].mean()]
     return temp
 
-
 def financial_class(df, level):  # обчислюємо фінанс клас за гендером і віком
     col = 'Passenger Class'
-    temp = [df[col].loc[((df[col] == level) & (df['Sex'] == 'Male')
-                         & (df['Age'] >= 18))].count(),
-            df[col].loc[((df[col] == level) & (df['Sex'] == 'Female')
-                         & (df['Age'] >= 18))].count(),
+    temp = [df[col].loc[((df[col] == level) & (df['Sex'] == 'Male') & (df['Age'] >= 18))].count(),
+            df[col].loc[((df[col] == level) & (df['Sex'] == 'Female') & (df['Age'] >= 18))].count(),
             df[col].loc[((df[col] == level) & (df['Age'] < 18))].count()]
     return temp
-
 
 def people_alive(df, level):  # обчислюємо кількість живих за гендером і віком
     col = 'Passenger Class'
     temp = [df[col].loc[
-                ((df[col] == level) & (df['Sex'] == 'Male')
-                 & (df['Age'] >= 18) & (df['Survived'] == 'Yes'))].count(),
+                ((df[col] == level) & (df['Sex'] == 'Male') & (df['Age'] >= 18) & (df['Survived'] == 'Yes'))].count(),
             df[col].loc[
-                ((df[col] == level) & (df['Sex'] == 'Female')
-                 & (df['Age'] >= 18) & (df['Survived'] == 'Yes'))].count(),
-            df[col].loc[((df[col] == level) & (df['Age'] < 18)
-                         & (df['Survived'] == 'Yes'))].count()]
+                ((df[col] == level) & (df['Sex'] == 'Female') & (df['Age'] >= 18) & (df['Survived'] == 'Yes'))].count(),
+            df[col].loc[((df[col] == level) & (df['Age'] < 18) & (df['Survived'] == 'Yes'))].count()]
     return temp
-
 
 def survive_percent(df):  # обчислюємо відсоток виживших
-    temp = 100 * (df['First alive'] + df['Second alive']
-                  + df['Third alive']) / df['Count']
+    temp = 100 * (df['First alive'] + df['Second alive'] + df['Third alive']) / df['Count']
     return temp
-
 
 new_frame = pd.DataFrame()
 
