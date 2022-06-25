@@ -1,81 +1,88 @@
 
 import pandas as pd
 import numpy as np
+from nbpep8.nbpep8 import pep8
 
 def connect_data():
+
+    # створюємо та виводимо DataFrame об'єкт (frame)
     data_frame = pd.read_csv('titanic.csv', sep=';')
     return data_frame
+    
 # Перевірити наявність пустих значень в спостереженнях (NaN заначення в строках). 
 def empty_values(data_frame):
     empty_value = data_frame
     empty_value = pd.DataFrame(empty_value.isnull().sum(axis=1), columns=['NaN'])
     return empty_value
+    
 #Видалити атрибут, якій містить максимальну кількість відсутніх значень
 def delete_of_max_empty_values(data_frame, empty_value):
     delete_value = data_frame
     max_value = empty_value['empty_value'].max()
     delete_value = delete.drop(np.where(empty_value['empty_value'] == max_value)[0])#Удалить строки и столбцы
     return delete_value
+    
 #Видалити спостереження, які містять хоча б одне значення NaN
 def delete_of_nan(data_frame):
     delete_value = data_frame
     delete_value = delete_value.dropna()#удаления строк и столбцов с значениями NULL/NAN.
     return delete_value
+    
 # У окрему структуру даних data frame згрупувати дані спостережнь для жінок, чоловіків та дітей
-def gender(df):
+def gender(data_fr):
     res = []  # функція повертає кількість людей
     count = []  # male/female/child
     # loc() дозволяє звертатися до структури по міткам
-    male = df['Sex'].loc[((df['Sex'] == 'Male') & (df['Age'] >= 18))].count()
-    female = df['Sex'].loc[((df['Sex'] == 'Female') & (df['Age'] >= 18))].count()
-    child = df['Sex'].loc[df['Age'] < 18].count()
+    male = data_fr['Sex'].loc[((data_fr['Sex'] == 'Male') & (data_fr['Age'] >= 18))].count()
+    female = data_fr['Sex'].loc[((data_fr['Sex'] == 'Female') & (data_fr['Age'] >= 18))].count()
+    child = data_fr['Sex'].loc[data_fr['Age'] < 18].count()
     count.append(male)
     count.append(female)
     count.append(child)
     res += 'Male', 'Fmale', 'Child'
     return res, count
     
-def average_age(df):  # обчислюємо середній вік за гендером
-    temp = [df['Age'].loc[((df['Sex'] == 'Male') & (df['Age'] >= 18))].mean(),
-            df['Age'].loc[((df['Sex'] == 'Female') & (df['Age'] >= 18))].mean(),
-            df['Age'].loc[df['Age'] < 18].mean()]
+def average_age(data_fr):  # обчислюємо середній вік за гендером
+    temp = [data_fr['Age'].loc[((data_fr['Sex'] == 'Male') & (data_fr['Age'] >= 18))].mean(),
+            data_fr['Age'].loc[((data_fr['Sex'] == 'Female') & (data_fr['Age'] >= 18))].mean(),
+            data_fr['Age'].loc[data_fr['Age'] < 18].mean()]
     return temp
 
-def financial_class(df, level):  # обчислюємо фінанс клас за гендером і віком
+def financial_class(data_fr, level):  # обчислюємо фінанс клас за гендером і віком
     col = 'Passenger Class'
-    temp = [df[col].loc[((df[col] == level) & (df['Sex'] == 'Male') & (df['Age'] >= 18))].count(),
-            df[col].loc[((df[col] == level) & (df['Sex'] == 'Female') & (df['Age'] >= 18))].count(),
-            df[col].loc[((df[col] == level) & (df['Age'] < 18))].count()]
+    temp = [data_fr[col].loc[((data_fr[col] == level) & (data_fr['Sex'] == 'Male') & (data_fr['Age'] >= 18))].count(),
+            data_fr[col].loc[((data_fr[col] == level) & (data_fr['Sex'] == 'Female') & (data_fr['Age'] >= 18))].count(),
+            data_fr[col].loc[((data_fr[col] == level) & (data_fr['Age'] < 18))].count()]
     return temp
 
-def people_alive(df, level):  # обчислюємо кількість живих за гендером і віком
+def people_alive(data_fr, level):  # обчислюємо кількість живих за гендером і віком
     col = 'Passenger Class'
-    temp = [df[col].loc[
-                ((df[col] == level) & (df['Sex'] == 'Male') & (df['Age'] >= 18) & (df['Survived'] == 'Yes'))].count(),
-            df[col].loc[
-                ((df[col] == level) & (df['Sex'] == 'Female') & (df['Age'] >= 18) & (df['Survived'] == 'Yes'))].count(),
-            df[col].loc[((df[col] == level) & (df['Age'] < 18) & (df['Survived'] == 'Yes'))].count()]
+    temp = [data_fr[col].loc[
+                ((data_fr[col] == level) & (data_fr['Sex'] == 'Male') & (data_fr['Age'] >= 18) & (data_fr['Survived'] == 'Yes'))].count(),
+            data_fr[col].loc[
+                ((data_fr[col] == level) & (data_fr['Sex'] == 'Female') & (data_fr['Age'] >= 18) & (data_fr['Survived'] == 'Yes'))].count(),
+            data_fr[col].loc[((data_fr[col] == level) & (data_fr['Age'] < 18) & (data_fr['Survived'] == 'Yes'))].count()]
     return temp
 
-def survive_percent(df):  # обчислюємо відсоток виживших
-    temp = 100 * (df['First alive'] + df['Second alive'] + df['Third alive']) / df['Count']
+def survive_percent(data_fr):  # обчислюємо відсоток виживших
+    temp = 100 * (data_fr['First alive'] + data_fr['Second alive'] + data_fr['Third alive']) / data_fr['Count']
     return temp
-
+    
 new_frame = pd.DataFrame()
 
-new_frame['Gender'], new_frame['Count'] = gender(frame)
-new_frame['Average age'] = average_age(frame)
+new_frame['Gender'], new_frame['Count'] = gender(data_frame)
+new_frame['Average age'] = average_age(data_frame)
 
-new_frame['First class'] = financial_class(frame, 'First')
-new_frame['First alive'] = people_alive(frame, 'First')
+new_frame['First class'] = financial_class(data_frame, 'First')
+new_frame['First alive'] = people_alive(data_frame, 'First')
 
-new_frame['Second class'] = financial_class(frame, 'Second')
-new_frame['Second alive'] = people_alive(frame, 'Second')
+new_frame['Second class'] = financial_class(data_frame, 'Second')
+new_frame['Second alive'] = people_alive(data_frame, 'Second')
 
-new_frame['Third class'] = financial_class(frame, 'Third')
-new_frame['Third alive'] = people_alive(frame, 'Third')
+new_frame['Third class'] = financial_class(data_frame, 'Third')
+new_frame['Third alive'] = people_alive(data_frame, 'Third')
 
-new_frame['Survaving %'] = survive_percent(new_frame)
+new_frame['Survaving %'] = survive_percent(data_frame)
 
 data_frame = connect_data()
 print("Data Frame:\n", data_frame)
